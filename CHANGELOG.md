@@ -13,9 +13,16 @@ Engineering-only phase/task bookkeeping stays in that archive. Existing comparis
 
 ## [Unreleased]
 
+## [5.16.1] - 2026-11-16
+
 ### Fixed
 
 - `/harness-progress` now renders its HTML in English when `i18n.language` is `en` (the default). `render-html.sh` picks a `<name>.<locale>.html.template` when one exists and otherwise falls back to the existing template; only the progress template has an English version so far.
+- The session start check no longer launches the Go test binary as if it were the harness, including test binaries that have been renamed. `bin/harness` stays a dispatcher shim, and the four bundled platform binaries were rebuilt for this fix.
+
+### Changed
+
+- The required Go test check now runs the full suite, split across two shards. Each package has an outer timeout, and a package is retried once only on a machine-level fork error, never when its log shows a test failure. Shards rerun on GitHub when the self-hosted runner fails. These changes affect contributors and CI only, not installed plugins.
 
 ## [5.16.0] - 2026-10-15
 
@@ -2054,7 +2061,8 @@ The runtime effect in this historical release has not been re-tested. The [curre
 
 For 2.9.x and earlier, see [GitHub Releases](https://github.com/Chachamaru127/claude-code-harness/releases).
 
-[Unreleased]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.16.0...HEAD
+[Unreleased]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.16.1...HEAD
+[5.16.1]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.16.0...v5.16.1
 [5.16.0]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.15.0...v5.16.0
 [5.15.0]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.14.1...v5.15.0
 [5.14.1]: https://github.com/Chachamaru127/claude-code-harness/compare/v5.14.0...v5.14.1
